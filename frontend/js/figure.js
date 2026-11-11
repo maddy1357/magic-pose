@@ -59,7 +59,7 @@ export function figureSVG(pose, opt = {}) {
   const armsOuter = pose.figures.map((f) => shapes(f, t, 'arms')).join('');
   const armsInner = pose.figures.map((f) => shapes(f, 0, 'arms')).join('');
   const style = 'stroke-linecap="round" stroke-linejoin="round"';
-  return `<svg class="${opt.className || ''}" viewBox="${x} ${y} ${w} ${h}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+  return `<svg class="figure ${opt.className || ''}" viewBox="${x} ${y} ${w} ${h}" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
 <defs>
 <mask id="${id}o" maskUnits="userSpaceOnUse" ${box}>
 <g fill="#fff" stroke="#fff" ${style}>${outer}</g><g fill="#000" stroke="#000" ${style}>${inner}</g>

@@ -4,10 +4,7 @@
  * The library and model are only downloaded when the coach is switched on.
  */
 import { BONES } from './figure.js';
-
-const VERSION = '0.10.14';
-const CDN = `https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@${VERSION}`;
-const MODEL = 'https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task';
+import { loadVision, createTask, MODELS } from './vision.js';
 
 // MediaPipe landmark indices: [left-side, right-side] of the person's body
 const MP = {
@@ -35,19 +32,12 @@ export class PoseCoach {
   load() {
     if (this.loading) return this.loading;
     this.loading = (async () => {
-      const vision = await import(/* @vite-ignore */ `${CDN}/vision_bundle.mjs`);
-      const files = await vision.FilesetResolver.forVisionTasks(`${CDN}/wasm`);
-      const make = (delegate) =>
-        vision.PoseLandmarker.createFromOptions(files, {
-          baseOptions: { modelAssetPath: MODEL, delegate },
-          runningMode: 'VIDEO',
-          numPoses: 1,
-        });
-      try {
-        this.landmarker = await make('GPU');
-      } catch {
-        this.landmarker = await make('CPU');
-      }
+      const { vision, files } = await loadVision();
+      this.landmarker = await createTask((o) => vision.PoseLandmarker.createFromOptions(files, o), {
+        baseOptions: { modelAssetPath: MODELS.pose },
+        runningMode: 'VIDEO',
+        numPoses: 1,
+      });
       return this;
     })();
     this.loading.catch(() => { this.loading = null; });

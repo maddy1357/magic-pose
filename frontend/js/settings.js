@@ -25,6 +25,8 @@ export const DEFAULTS = Object.freeze({
   ideaPoseId: 'hands-on-hips',
   templateId: 'neon-nights',
   favorites: [],
+  autoPose: true,
+  onboarded: false,
 });
 
 function read() {

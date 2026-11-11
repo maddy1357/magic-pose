@@ -2,8 +2,8 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <meta name="theme-color" content="#000000">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0b10">
   <meta name="description" content="Magic Pose - a camera with pose ideas, live pose outlines and instant AI photo templates.">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -12,100 +12,174 @@
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+<!-- Icon sprite -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-settings" viewBox="0 0 24 24"><path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></symbol>
+    <symbol id="i-flash" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></symbol>
+    <symbol id="i-flash-off" viewBox="0 0 24 24"><path d="M16.5 11H19l-3.6 4.8M12.4 19.8 11 22l1-8H5l3.6-4.8M11.4 4.1 13 2l-.6 5M3 3l18 18"/></symbol>
+    <symbol id="i-timer" viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M10 2h4"/></symbol>
+    <symbol id="i-filter" viewBox="0 0 24 24"><circle cx="9" cy="9" r="6"/><circle cx="15" cy="15" r="6"/></symbol>
+    <symbol id="i-grid" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></symbol>
+    <symbol id="i-compass" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/></symbol>
+    <symbol id="i-bulb" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-3.6 10.8c.4.3.6.8.6 1.3V16h6v-.9c0-.5.2-1 .6-1.3A6 6 0 0 0 12 3Z"/></symbol>
+    <symbol id="i-camera" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><circle cx="12" cy="13.5" r="3.5"/></symbol>
+    <symbol id="i-sparkles" viewBox="0 0 24 24"><path d="M10 3.5 11.6 8a2 2 0 0 0 1.3 1.3l4.6 1.6-4.6 1.6a2 2 0 0 0-1.3 1.3L10 18.5l-1.6-4.6a2 2 0 0 0-1.3-1.3L2.5 11l4.6-1.6A2 2 0 0 0 8.4 8L10 3.5ZM18.5 14l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8.8-2.2ZM18 2l.6 1.4L20 4l-1.4.6L18 6l-.6-1.4L16 4l1.4-.6L18 2Z"/></symbol>
+    <symbol id="i-flip" viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1Z"/><path d="M15 12.5a3 3 0 0 0-5.2-1.2M9 15.5a3 3 0 0 0 5.2 1.2"/><path d="M15 10v2.5h-2.5M9 18v-2.5h2.5"/></symbol>
+    <symbol id="i-image" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="9" cy="9" r="2"/><path d="m21 15-4.5-4.5L6 21"/></symbol>
+    <symbol id="i-back" viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></symbol>
+    <symbol id="i-search" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></symbol>
+    <symbol id="i-heart" viewBox="0 0 24 24"><path d="M19.5 12.6 12 20l-7.5-7.4A5 5 0 1 1 12 6a5 5 0 1 1 7.5 6.6Z"/></symbol>
+    <symbol id="i-trash" viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6M10 11v6M14 11v6"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 15V3M8 7l4-4 4 4M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12M8 11l4 4 4-4M5 21h14"/></symbol>
+    <symbol id="i-compare" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M12 2v20"/></symbol>
+    <symbol id="i-retry" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7L3 8M3 3v5h5"/></symbol>
+    <symbol id="i-upload" viewBox="0 0 24 24"><path d="M12 16V4M8 8l4-4 4 4M4 20h16"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 5 5 9-10"/></symbol>
+    <symbol id="i-chevron" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></symbol>
+  </defs>
+</svg>
+
 <div id="app" class="app" data-mode="photo">
+
+  <!-- ============================ Top bar ============================ -->
+  <header class="topbar">
+    <div class="tools">
+      <button class="tool" id="flashBtn" type="button" aria-label="Flash" title="Flash">
+        <svg><use href="#i-flash-off"/></svg>
+      </button>
+      <button class="tool" id="timerBtn" type="button" aria-label="Self-timer" title="Self-timer">
+        <svg><use href="#i-timer"/></svg><span class="tool-badge" id="timerLabel" hidden></span>
+      </button>
+      <button class="tool text" id="ratioBtn" type="button" aria-label="Aspect ratio" title="Aspect ratio"><span id="ratioLabel">3:4</span></button>
+      <button class="tool" id="filterBtn" type="button" aria-label="Filter" title="Filter">
+        <svg><use href="#i-filter"/></svg><span class="tool-badge wide" id="filterLabel" hidden></span>
+      </button>
+      <button class="tool" id="gridBtn" type="button" aria-label="Grid lines" title="Grid lines">
+        <svg><use href="#i-grid"/></svg>
+      </button>
+    </div>
+    <button class="tool" id="settingsBtn" type="button" aria-label="Settings" title="Settings">
+      <svg><use href="#i-settings"/></svg>
+    </button>
+  </header>
 
   <!-- ============================ Camera ============================ -->
   <main class="stage" id="stage">
     <div class="frame" id="frame">
       <video id="video" playsinline muted autoplay></video>
-      <canvas id="liveFx" class="live-fx" hidden></canvas>
       <div class="grid" id="grid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
       <div class="overlay" id="overlay" aria-hidden="true"></div>
       <canvas class="you" id="youCanvas" aria-hidden="true"></canvas>
       <div class="screen-flash" id="screenFlash"></div>
       <div class="countdown" id="countdown" hidden></div>
 
-      <div class="coach" id="coach" hidden>
-        <svg viewBox="0 0 44 44" class="coach-ring"><circle cx="22" cy="22" r="19" class="track"/><circle cx="22" cy="22" r="19" class="value" id="coachRing"/></svg>
-        <div><b id="coachScore">–</b><small id="coachMsg">Loading pose coach…</small></div>
+      <!-- Info pill: current pose / style, coach score -->
+      <div class="hint" id="hint" hidden>
+        <div class="coach" id="coach" hidden>
+          <svg viewBox="0 0 44 44" class="coach-ring"><circle cx="22" cy="22" r="19" class="track"/><circle cx="22" cy="22" r="19" class="value" id="coachRing"/></svg>
+          <b id="coachScore">–</b>
+        </div>
+        <div class="hint-text">
+          <b id="hintTitle"></b>
+          <small id="hintSub"></small>
+        </div>
+        <button class="hint-btn" id="hintBtn" type="button">Change</button>
       </div>
 
+      <div class="zoom" id="zoom" role="group" aria-label="Zoom"></div>
+
       <div class="cam-msg" id="camMsg" hidden>
-        <div class="cam-msg-icon">📷</div>
+        <div class="cam-msg-icon"><svg><use href="#i-camera"/></svg></div>
         <h2 id="camMsgTitle">Camera unavailable</h2>
         <p id="camMsgText"></p>
         <div class="cam-msg-actions">
           <button class="btn primary" id="retryCamBtn" type="button">Try again</button>
-          <button class="btn" id="uploadBtn" type="button">Use a photo instead</button>
+          <button class="btn" id="uploadBtn" type="button"><svg><use href="#i-upload"/></svg>Use a photo</button>
         </div>
       </div>
     </div>
   </main>
 
-  <!-- ============================ Top bar ============================ -->
-  <header class="topbar">
-    <button class="icon-btn" id="settingsBtn" type="button" aria-label="Settings" title="Settings">
-      <svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
-    </button>
-    <div class="top-tools">
-      <button class="chip-btn" id="flashBtn" type="button" title="Flash">
-        <svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg><span id="flashLabel">Off</span>
-      </button>
-      <button class="chip-btn" id="timerBtn" type="button" title="Timer">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg><span id="timerLabel">Off</span>
-      </button>
-      <button class="chip-btn" id="ratioBtn" type="button" title="Aspect ratio"><span id="ratioLabel">3:4</span></button>
-      <button class="chip-btn" id="filterBtn" type="button" title="Filter">
-        <svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="6"/><circle cx="15" cy="15" r="6"/></svg><span id="filterLabel">Normal</span>
-      </button>
+  <!-- ============================ Dock ============================ -->
+  <aside class="dock">
+    <div class="brand">
+      <img src="icons/icon.svg" alt="">
+      <div><b>Magic Pose</b><small>Strike the perfect pose</small></div>
     </div>
-    <button class="icon-btn" id="gridBtn" type="button" aria-label="Grid" title="Grid">
-      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
-    </button>
-  </header>
 
-  <div class="mode-badge" id="modeBadge" hidden></div>
-
-  <!-- ============================ Bottom ============================ -->
-  <footer class="bottom">
-    <div class="zoom" id="zoom" role="group" aria-label="Zoom"></div>
-
-    <div class="strip-wrap" id="stripWrap" hidden>
+    <section class="picker" id="stripWrap" hidden>
+      <div class="picker-head">
+        <span id="pickerTitle">Pick a pose</span>
+        <button class="auto-chip" id="autoBtn" type="button" aria-pressed="true" title="Change the pose automatically to suit the background">
+          <svg><use href="#i-sparkles"/></svg><span>Auto</span><i class="dot"></i>
+        </button>
+        <button class="link" id="pickerMore" type="button">See all <svg><use href="#i-chevron"/></svg></button>
+      </div>
+      <div class="scene-line" id="sceneLine" hidden></div>
       <div class="strip" id="strip" role="listbox"></div>
-    </div>
+    </section>
+
+    <section class="dock-help" id="dockHelp">
+      <p class="dock-help-title">Need inspiration?</p>
+      <button class="help-card" type="button" data-goto="explore"><span class="help-ic c1"><svg><use href="#i-compass"/></svg></span><span><b>Explore poses</b><small>36 ideas for solo, couple and group shots</small></span><svg class="chev"><use href="#i-chevron"/></svg></button>
+      <button class="help-card" type="button" data-goto="idea"><span class="help-ic c2"><svg><use href="#i-bulb"/></svg></span><span><b>Pose outline</b><small>Line yourself up with a guide on the camera</small></span><svg class="chev"><use href="#i-chevron"/></svg></button>
+      <button class="help-card" type="button" data-goto="template"><span class="help-ic c3"><svg><use href="#i-sparkles"/></svg></span><span><b>AI templates</b><small>Turn your photo into a new style instantly</small></span><svg class="chev"><use href="#i-chevron"/></svg></button>
+    </section>
 
     <nav class="modes" id="modes" role="tablist" aria-label="Camera mode">
-      <button role="tab" data-mode="explore" type="button">Explore</button>
-      <button role="tab" data-mode="idea" type="button">Idea</button>
-      <button role="tab" data-mode="photo" type="button" aria-selected="true">Photo</button>
-      <button role="tab" data-mode="template" type="button">Template</button>
+      <button role="tab" data-mode="explore" type="button"><svg><use href="#i-compass"/></svg><span>Explore</span></button>
+      <button role="tab" data-mode="idea" type="button"><svg><use href="#i-bulb"/></svg><span>Idea</span></button>
+      <button role="tab" data-mode="photo" type="button" aria-selected="true"><svg><use href="#i-camera"/></svg><span>Photo</span></button>
+      <button role="tab" data-mode="template" type="button"><svg><use href="#i-sparkles"/></svg><span>Template</span></button>
     </nav>
 
     <div class="controls">
-      <button class="thumb-btn" id="galleryBtn" type="button" aria-label="Gallery"><img id="galleryThumb" alt="" hidden></button>
-      <button class="shutter" id="shutter" type="button" aria-label="Take photo"><span></span></button>
-      <button class="icon-btn round" id="flipBtn" type="button" aria-label="Switch camera" title="Switch camera">
-        <svg viewBox="0 0 24 24"><path d="M20 7h-3l-2-3H9L7 7H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1Z"/><path d="M15.5 12.5a3.5 3.5 0 0 1-6.3 2M8.5 13.5a3.5 3.5 0 0 1 6.3-2"/><path d="M15 9.5v2h-2M9 16.5v-2h2"/></svg>
+      <button class="thumb-btn" id="galleryBtn" type="button" aria-label="Gallery" title="Gallery">
+        <svg><use href="#i-image"/></svg><img id="galleryThumb" alt="" hidden>
+      </button>
+      <button class="shutter" id="shutter" type="button" aria-label="Take photo"><span><svg><use href="#i-sparkles"/></svg></span></button>
+      <button class="round-btn" id="flipBtn" type="button" aria-label="Switch camera" title="Switch camera">
+        <svg><use href="#i-flip"/></svg>
       </button>
     </div>
-  </footer>
+  </aside>
+
+  <!-- ============================ Welcome ============================ -->
+  <section class="sheet welcome" id="welcomeSheet" aria-label="Welcome" hidden>
+    <div class="welcome-art"><img src="icons/icon.svg" alt=""></div>
+    <h2>Welcome to Magic Pose</h2>
+    <p class="lead">A camera that helps you pose, and makes your photos magical.</p>
+    <ul class="welcome-list">
+      <li><span class="help-ic c1"><svg><use href="#i-compass"/></svg></span><div><b>Explore</b><small>Browse 36 poses with tips for every occasion.</small></div></li>
+      <li><span class="help-ic c2"><svg><use href="#i-bulb"/></svg></span><div><b>Idea</b><small>See a pose outline on the camera and match it.</small></div></li>
+      <li><span class="help-ic c3"><svg><use href="#i-sparkles"/></svg></span><div><b>Template</b><small>Take the shot and AI restyles it instantly.</small></div></li>
+    </ul>
+    <button class="btn primary block" id="welcomeBtn" type="button">Start shooting</button>
+  </section>
 
   <!-- ============================ Explore ============================ -->
   <section class="sheet full" id="exploreSheet" aria-label="Explore poses" hidden>
-    <header class="sheet-head">
-      <button class="icon-btn" data-close type="button" aria-label="Back to camera"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
-      <h2>Explore poses</h2>
-      <span class="count" id="exploreCount"></span>
-    </header>
-    <div class="search">
-      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
-      <input id="exploreSearch" type="search" placeholder="Search poses — yoga, couple, selfie…" autocomplete="off">
+    <div class="full-inner">
+      <header class="page-head">
+        <button class="tool" data-close type="button" aria-label="Back to camera"><svg><use href="#i-back"/></svg></button>
+        <div class="page-title"><h2>Explore poses</h2><small id="exploreCount"></small></div>
+      </header>
+      <label class="search">
+        <svg><use href="#i-search"/></svg>
+        <input id="exploreSearch" type="search" placeholder="Search yoga, couple, selfie…" autocomplete="off">
+      </label>
+      <div class="cats" id="exploreCats" role="tablist"></div>
+      <div class="pose-grid" id="poseGrid"></div>
     </div>
-    <div class="cats" id="exploreCats" role="tablist"></div>
-    <div class="pose-grid" id="poseGrid"></div>
   </section>
 
   <!-- ============================ Pose detail ============================ -->
@@ -114,15 +188,16 @@
     <div class="pose-detail">
       <div class="pose-detail-fig" id="poseDetailFig"></div>
       <div class="pose-detail-body">
-        <div class="pose-detail-meta" id="poseDetailMeta"></div>
+        <div class="meta-row" id="poseDetailMeta"></div>
         <h2 id="poseDetailName"></h2>
         <p id="poseDetailDesc"></p>
+        <p class="tips-title">How to do it</p>
         <ul class="tips" id="poseDetailTips"></ul>
-        <div class="row">
-          <button class="btn primary grow" id="tryPoseBtn" type="button">✨ Try this pose</button>
-          <button class="btn icon" id="favPoseBtn" type="button" aria-label="Favourite">♡</button>
-        </div>
       </div>
+    </div>
+    <div class="sheet-actions">
+      <button class="btn icon" id="favPoseBtn" type="button" aria-label="Save to favourites"><svg><use href="#i-heart"/></svg></button>
+      <button class="btn primary grow" id="tryPoseBtn" type="button"><svg><use href="#i-bulb"/></svg>Try this pose</button>
     </div>
   </section>
 
@@ -131,79 +206,101 @@
     <div class="grabber"></div>
     <header class="sheet-head">
       <h2>Settings</h2>
-      <button class="icon-btn" data-close type="button" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+      <button class="tool" data-close type="button" aria-label="Close"><svg><use href="#i-close"/></svg></button>
     </header>
     <div class="settings" id="settingsForm">
-      <h3>Camera</h3>
-      <label class="set"><span>Resolution</span>
-        <select name="resolution"><option value="720">HD 720p</option><option value="1080">Full HD 1080p</option><option value="2160">4K (if supported)</option></select></label>
-      <label class="set"><span>Aspect ratio</span>
-        <select name="ratio"><option value="3:4">3:4</option><option value="9:16">9:16</option><option value="1:1">1:1</option><option value="full">Full screen</option></select></label>
-      <label class="set"><span>Self-timer</span>
-        <select name="timer"><option value="0">Off</option><option value="3">3 seconds</option><option value="5">5 seconds</option><option value="10">10 seconds</option></select></label>
-      <label class="set"><span>Mirror front camera photos</span><input type="checkbox" name="mirror"></label>
-      <label class="set"><span>Grid lines</span><input type="checkbox" name="grid"></label>
-      <label class="set"><span>Shutter sound</span><input type="checkbox" name="sound"></label>
-      <label class="set"><span>Photo quality <output id="jpegOut"></output></span><input type="range" name="jpeg" min="0.6" max="1" step="0.02"></label>
+      <p class="group-title">Camera</p>
+      <div class="group">
+        <label class="set"><span>Resolution</span>
+          <select name="resolution"><option value="720">HD 720p</option><option value="1080">Full HD 1080p</option><option value="2160">4K (if supported)</option></select></label>
+        <label class="set"><span>Aspect ratio</span>
+          <select name="ratio"><option value="3:4">3:4</option><option value="9:16">9:16</option><option value="1:1">1:1 Square</option><option value="full">Fill screen</option></select></label>
+        <label class="set"><span>Self-timer</span>
+          <select name="timer"><option value="0">Off</option><option value="3">3 seconds</option><option value="5">5 seconds</option><option value="10">10 seconds</option></select></label>
+        <label class="set"><span>Mirror selfies</span><input type="checkbox" name="mirror"></label>
+        <label class="set"><span>Grid lines</span><input type="checkbox" name="grid"></label>
+        <label class="set"><span>Shutter sound</span><input type="checkbox" name="sound"></label>
+        <label class="set"><span>Photo quality <output id="jpegOut"></output></span><input type="range" name="jpeg" min="0.6" max="1" step="0.02"></label>
+      </div>
 
-      <h3>Pose outline</h3>
-      <label class="set"><span>Outline colour</span>
-        <select name="overlayColor"><option value="#ffffff">White</option><option value="#ffd400">Yellow</option><option value="#3ef0ff">Cyan</option><option value="#ff4fd8">Pink</option><option value="#4dff88">Green</option></select></label>
-      <label class="set"><span>Outline opacity <output id="opacityOut"></output></span><input type="range" name="overlayOpacity" min="0.2" max="1" step="0.05"></label>
-      <label class="set"><span>Outline size <output id="sizeOut"></output></span><input type="range" name="overlaySize" min="0.6" max="1.2" step="0.05"></label>
-      <label class="set"><span>Pose coach <small>Live match score using on-device pose detection</small></span><input type="checkbox" name="coach"></label>
-      <label class="set"><span>Auto-capture when matched</span><input type="checkbox" name="autoCapture"></label>
-      <label class="set"><span>Match needed <output id="thresholdOut"></output></span><input type="range" name="threshold" min="0.6" max="0.95" step="0.05"></label>
+      <p class="group-title">Pose outline</p>
+      <div class="group">
+        <div class="set"><span>Colour</span>
+          <div class="swatches" id="colorSwatches" role="radiogroup" aria-label="Outline colour"></div>
+          <input type="hidden" name="overlayColor"></div>
+        <label class="set"><span>Opacity <output id="opacityOut"></output></span><input type="range" name="overlayOpacity" min="0.2" max="1" step="0.05"></label>
+        <label class="set"><span>Size <output id="sizeOut"></output></span><input type="range" name="overlaySize" min="0.6" max="1.2" step="0.05"></label>
+      </div>
 
-      <h3>AI templates</h3>
-      <div class="set static"><span>Status</span><b id="aiStatus">Checking…</b></div>
-      <label class="set"><span>AI quality <small>Higher looks better but takes longer</small></span>
-        <select name="aiQuality"><option value="low">Fast</option><option value="medium">Balanced</option><option value="high">Best</option></select></label>
-      <label class="set"><span>Also save the original photo</span><input type="checkbox" name="keepOriginal"></label>
+      <p class="group-title">Pose coach</p>
+      <div class="group">
+        <label class="set"><span>Live match score<small>Detects your pose on this device</small></span><input type="checkbox" name="coach"></label>
+        <label class="set"><span>Auto-capture when matched</span><input type="checkbox" name="autoCapture"></label>
+        <label class="set"><span>Match needed <output id="thresholdOut"></output></span><input type="range" name="threshold" min="0.6" max="0.95" step="0.05"></label>
+      </div>
 
-      <h3>Storage</h3>
-      <div class="set static"><span>Gallery <small id="galleryUsage"></small></span><button class="btn danger small" id="clearGalleryBtn" type="button">Clear</button></div>
-      <p class="about">Magic Pose <span id="versionLabel"></span> · Photos stay on this device. Only Template photos are sent to the AI service for editing.</p>
+      <p class="group-title">AI templates</p>
+      <div class="group">
+        <div class="set"><span>Status</span><b class="status" id="aiStatus">Checking…</b></div>
+        <label class="set"><span>AI quality<small>Higher looks better, but takes longer</small></span>
+          <select name="aiQuality"><option value="low">Fast</option><option value="medium">Balanced</option><option value="high">Best</option></select></label>
+        <label class="set"><span>Keep the original photo</span><input type="checkbox" name="keepOriginal"></label>
+      </div>
+
+      <p class="group-title">Storage</p>
+      <div class="group">
+        <div class="set"><span>Gallery<small id="galleryUsage"></small></span><button class="btn danger small" id="clearGalleryBtn" type="button">Clear all</button></div>
+      </div>
+      <p class="about">Magic Pose <span id="versionLabel"></span> · Your photos stay on this device. Only Template photos are sent to the AI service for editing.</p>
     </div>
   </section>
 
   <!-- ============================ Gallery ============================ -->
   <section class="sheet full" id="gallerySheet" aria-label="Gallery" hidden>
-    <header class="sheet-head">
-      <button class="icon-btn" data-close type="button" aria-label="Back to camera"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
-      <h2>Gallery</h2>
-      <span class="count" id="galleryCount"></span>
-    </header>
-    <div class="gallery-grid" id="galleryGrid"></div>
-    <p class="empty" id="galleryEmpty" hidden>No photos yet. Go take some magic shots! ✨</p>
+    <div class="full-inner">
+      <header class="page-head">
+        <button class="tool" data-close type="button" aria-label="Back to camera"><svg><use href="#i-back"/></svg></button>
+        <div class="page-title"><h2>Gallery</h2><small id="galleryCount"></small></div>
+      </header>
+      <div class="gallery-grid" id="galleryGrid"></div>
+      <div class="empty-state" id="galleryEmpty" hidden>
+        <div class="empty-ic"><svg><use href="#i-image"/></svg></div>
+        <b>No photos yet</b>
+        <small>Your shots and AI edits will appear here.</small>
+        <button class="btn primary" data-close type="button">Open camera</button>
+      </div>
+    </div>
   </section>
 
   <!-- ============================ Viewer / AI result ============================ -->
   <section class="viewer" id="viewer" aria-label="Photo" hidden>
     <header class="viewer-head">
-      <button class="icon-btn" id="viewerClose" type="button" aria-label="Close"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+      <button class="tool" id="viewerClose" type="button" aria-label="Close"><svg><use href="#i-back"/></svg></button>
       <div class="viewer-title" id="viewerTitle"></div>
-      <button class="icon-btn" id="viewerDelete" type="button" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+      <button class="tool" id="viewerDelete" type="button" aria-label="Delete" title="Delete"><svg><use href="#i-trash"/></svg></button>
     </header>
     <div class="viewer-stage" id="viewerStage">
-      <img id="viewerImg" alt="">
-      <img id="viewerBefore" class="before" alt="" hidden>
+      <div class="viewer-img">
+        <img id="viewerImg" alt="">
+        <img id="viewerBefore" class="before" alt="" hidden>
+        <span class="before-tag" id="beforeTag" hidden>Original</span>
+      </div>
       <div class="ai-progress" id="aiProgress" hidden>
-        <div class="sparkle">✨</div>
-        <b id="aiProgressTitle">AI is restyling your photo…</b>
-        <small id="aiProgressText">Showing an instant preview meanwhile</small>
+        <div class="sparkle"><svg><use href="#i-sparkles"/></svg></div>
+        <div><b id="aiProgressTitle">AI is restyling your photo…</b><small id="aiProgressText">Here's an instant preview meanwhile</small></div>
         <div class="bar"><i></i></div>
       </div>
       <div class="viewer-note" id="viewerNote" hidden></div>
     </div>
     <div class="restyle" id="restyle" hidden>
+      <p class="restyle-title">Try another style</p>
       <div class="strip small" id="restyleStrip"></div>
     </div>
     <footer class="viewer-actions">
-      <button class="btn" id="compareBtn" type="button" hidden>Hold to compare</button>
-      <button class="btn" id="retryAiBtn" type="button" hidden>Retry AI</button>
-      <button class="btn" id="shareBtn" type="button">Share</button>
-      <button class="btn primary" id="saveBtn" type="button">Download</button>
+      <button class="action" id="compareBtn" type="button" hidden><svg><use href="#i-compare"/></svg><span>Hold to compare</span></button>
+      <button class="action" id="retryAiBtn" type="button" hidden><svg><use href="#i-retry"/></svg><span>Retry AI</span></button>
+      <button class="action" id="shareBtn" type="button"><svg><use href="#i-share"/></svg><span>Share</span></button>
+      <button class="action primary" id="saveBtn" type="button"><svg><use href="#i-download"/></svg><span>Download</span></button>
     </footer>
   </section>
 

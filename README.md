@@ -19,28 +19,80 @@ It is a full-stack app:
 
 ---
 
-## 🚀 Quick start
+## 💡 Why Magic Pose?
 
+Most people know the feeling: the camera is ready, but **you don't know how to stand**. Photos come out stiff, every shot uses the same pose, and turning a good photo into something special means editing apps and a lot of time.
+
+Magic Pose fixes those three problems:
+
+1. **"I don't know what pose to do"**: **Explore** has 36 ready-made poses with step-by-step tips, and **Auto pose** suggests one that fits your background and the number of people in the frame.
+2. **"I can't tell if I'm doing it right"**: **Idea** draws the pose outline on the camera, so you or the person holding the phone can line it up. The **pose coach** gives a live match score and can take the photo for you.
+3. **"Editing takes too long"**: **Template** restyles the photo with AI the moment you take it (neon city, golden hour, anime, royal portrait…), with no editing app needed.
+
+It is built as a **web app**: there is nothing to install from an app store, it works on phones and computers, and your photos stay on your device. Only Template photos are sent for AI editing.
+
+---
+
+## 🚀 How to run
+
+### 1. What you need
+| Tool | Version | Check with |
+|---|---|---|
+| [Node.js](https://nodejs.org/) | 18.17 or newer (20 LTS recommended) | `node -v` |
+| npm | comes with Node.js | `npm -v` |
+| [Git](https://git-scm.com/) | any | `git --version` |
+| A browser with camera support | Chrome, Edge, Safari or Firefox | |
+
+### 2. Download and install
 ```bash
 git clone https://github.com/maddy1357/magic-pose.git
 cd magic-pose
 npm install
-npm start
 ```
 
-Open **http://localhost:3000** and allow camera access.
+### 3. Start the app
+```bash
+npm start
+```
+You should see:
+```
+Magic Pose v1.0.0 running at http://localhost:3000
+AI templates: off - set OPENAI_API_KEY in .env to enable (the instant preview still works)
+```
+Open **http://localhost:3000** and click **Allow** when the browser asks to use the camera.
 
-### Turn on AI templates
+> For development, `npm run dev` restarts the server automatically when you change a backend file. Frontend files are served as they are, so just refresh the page.
 
+### 4. (Optional) Turn on AI templates
 Template mode works without any setup: you get an **instant on-device preview** of the style. For the full AI edit, add an image-model key:
 
 ```bash
+# macOS / Linux / Git Bash
 cp .env.example .env
-# then edit .env and set OPENAI_API_KEY=sk-...
-npm start
+# Windows PowerShell
+Copy-Item .env.example .env
 ```
+Edit `.env`, set `OPENAI_API_KEY=sk-...`, then restart with `npm start`. The server logs `AI templates: openai (gpt-image-1)`, and the app shows the status under **Settings → AI templates**.
 
-The server logs `AI templates: openai (gpt-image-1)` when AI is on. You can also see the status in the app under **Settings → AI templates**.
+### 5. (Optional) Use a different port
+```bash
+PORT=8080 npm start             # macOS / Linux / Git Bash
+$env:PORT=8080; npm start       # Windows PowerShell
+```
+Or set `PORT=8080` in `.env`.
+
+### 6. Stop the app
+Press <kbd>Ctrl</kbd> + <kbd>C</kbd> in the terminal.
+
+### Troubleshooting
+| Problem | Fix |
+|---|---|
+| "Camera permission blocked" | Click the camera icon in the address bar, allow the camera, then press **Try again** |
+| "Camera is busy" | Close other apps that use the camera (Zoom, Teams, the Camera app) and press **Try again** |
+| The camera won't open on a phone | Phones need **HTTPS**. See [Use it on your phone](#-use-it-on-your-phone) |
+| `EADDRINUSE: address already in use :::3000` | Another app is using port 3000. Stop it, or start with a different `PORT` |
+| Auto pose or the pose coach says "unavailable" | They download their models from the internet the first time. Check your connection and reload |
+| "Could not load poses" | The server is not running. Start it with `npm start` |
 
 ---
 
@@ -68,10 +120,11 @@ The server logs `AI templates: openai (gpt-image-1)` when AI is on. You can also
 ### 💡 Idea: pose outline overlay
 - The chosen pose is drawn as a clean **outline over the camera**. You can change its colour, opacity and size.
 - A pose strip above the shutter lets you switch ideas quickly, with favourites first.
+- **Auto pose** (on by default): the app reads the **background** and switches to a pose that suits it, all on your device. It recognises beaches, waterside, mountains, snow, nature, landmarks, city streets, walls and doors, sofas and seats, gyms, stages and parties, indoor rooms, night scenes and open sky. It also counts the people in the frame, so two people get couple poses and three or more get group poses. Suggested poses are tagged **AUTO**. If you pick a pose yourself, the app keeps it until the scene changes, and the **Auto** chip turns the feature off.
 - **Pose coach** (optional): [MediaPipe Pose Landmarker](https://ai.google.dev/edge/mediapipe/solutions/vision/pose_landmarker) runs **on the device**. It draws your skeleton and shows a live **match %**. The outline glows green when you match, and **auto-capture** takes the photo while you hold the pose. The library and model are only downloaded when you switch the coach on.
 
 ### 🪄 Template: instant AI restyle
-1. Choose a template. Its pose outline appears on the camera.
+1. Choose a template, or let **Auto** pick one that suits your background (beach → Golden Hour, city → Neon Nights, snow → Winter Wonderland, two people → Sunset Love…). Its pose outline appears on the camera.
 2. Strike the pose and take the picture.
 3. An **instant preview** of the style appears at once, made on your device.
 4. The photo goes to the AI, which **restyles it while keeping your face and pose**. The preview is replaced when the edit is ready, usually within a few seconds. If you close the viewer, the result still lands in your gallery.
@@ -157,6 +210,8 @@ magic-pose/
         ├── camera.js          # camera, torch, zoom, capture
         ├── figure.js          # pose outline SVG renderer
         ├── coach.js           # MediaPipe pose matching
+        ├── scene.js           # Auto pose: background + people → suggestions
+        ├── vision.js          # shared MediaPipe loader
         ├── stylize.js         # filters & instant template previews
         ├── gallery.js         # IndexedDB photo storage
         └── settings.js, api.js
@@ -172,8 +227,10 @@ The tests cover the API, the input checks, the edit flow (using the `mock` provi
 
 ## 🔒 Privacy
 
-Photos stay on your device. Only photos taken in **Template** mode are sent, through your own server, to the AI provider you configure. The pose coach runs entirely in the browser.
+Photos stay on your device. Only photos taken in **Template** mode are sent, through your own server, to the AI provider you configure. The pose coach and Auto pose run entirely in the browser.
 
 ## 📄 License
 
-[MIT](LICENSE) © 2026 maddy1357
+Magic Pose is a **MahimJ** project, released under the [MIT License](LICENSE).
+
+Copyright © 2026 MahimJ (maddy1357). You are free to use, copy, change and share it, including commercially, as long as the copyright notice and licence text are included. The software is provided "as is", without warranty.

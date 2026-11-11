@@ -9,7 +9,7 @@
     "test": "node --test backend/test/"
   },
   "keywords": ["camera", "pose", "photography", "ai", "image-editing", "pose-detection", "pwa", "express"],
-  "author": "maddy1357",
+  "author": "MahimJ (maddy1357)",
   "license": "MIT",
   "engines": {
     "node": ">=18.17"
