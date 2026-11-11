@@ -10,7 +10,7 @@
   },
   "keywords": ["camera", "pose", "photography", "ai", "image-editing", "pose-detection", "pwa", "express"],
   "author": "MahimJ (maddy1357)",
-  "license": "MIT",
+  "license": "UNLICENSED",
   "engines": {
     "node": ">=18.17"
   },

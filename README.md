@@ -231,6 +231,6 @@ Photos stay on your device. Only photos taken in **Template** mode are sent, thr
 
 ## 📄 License
 
-Magic Pose is a **MahimJ** project, released under the [MIT License](LICENSE).
+Magic Pose is a **MahimJ** project, proprietary software. See [LICENSE](LICENSE).
 
 Copyright © 2026 MahimJ (maddy1357). You are free to use, copy, change and share it, including commercially, as long as the copyright notice and licence text are included. The software is provided "as is", without warranty.
