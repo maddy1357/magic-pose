@@ -1,0 +1,14 @@
+{
+  "name": "Magic Pose",
+  "short_name": "Magic Pose",
+  "description": "A camera with pose ideas, live pose outlines and instant AI photo templates.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#000000",
+  "theme_color": "#000000",
+  "icons": [
+    { "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

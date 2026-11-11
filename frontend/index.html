@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="description" content="Magic Pose - a camera with pose ideas, live pose outlines and instant AI photo templates.">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Magic Pose</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon.svg">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="app" class="app" data-mode="photo">
+
+  <!-- ============================ Camera ============================ -->
+  <main class="stage" id="stage">
+    <div class="frame" id="frame">
+      <video id="video" playsinline muted autoplay></video>
+      <canvas id="liveFx" class="live-fx" hidden></canvas>
+      <div class="grid" id="grid" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+      <div class="overlay" id="overlay" aria-hidden="true"></div>
+      <canvas class="you" id="youCanvas" aria-hidden="true"></canvas>
+      <div class="screen-flash" id="screenFlash"></div>
+      <div class="countdown" id="countdown" hidden></div>
+
+      <div class="coach" id="coach" hidden>
+        <svg viewBox="0 0 44 44" class="coach-ring"><circle cx="22" cy="22" r="19" class="track"/><circle cx="22" cy="22" r="19" class="value" id="coachRing"/></svg>
+        <div><b id="coachScore">–</b><small id="coachMsg">Loading pose coach…</small></div>
+      </div>
+
+      <div class="cam-msg" id="camMsg" hidden>
+        <div class="cam-msg-icon">📷</div>
+        <h2 id="camMsgTitle">Camera unavailable</h2>
+        <p id="camMsgText"></p>
+        <div class="cam-msg-actions">
+          <button class="btn primary" id="retryCamBtn" type="button">Try again</button>
+          <button class="btn" id="uploadBtn" type="button">Use a photo instead</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- ============================ Top bar ============================ -->
+  <header class="topbar">
+    <button class="icon-btn" id="settingsBtn" type="button" aria-label="Settings" title="Settings">
+      <svg viewBox="0 0 24 24"><path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1Z"/></svg>
+    </button>
+    <div class="top-tools">
+      <button class="chip-btn" id="flashBtn" type="button" title="Flash">
+        <svg viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg><span id="flashLabel">Off</span>
+      </button>
+      <button class="chip-btn" id="timerBtn" type="button" title="Timer">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2 2M9 2h6"/></svg><span id="timerLabel">Off</span>
+      </button>
+      <button class="chip-btn" id="ratioBtn" type="button" title="Aspect ratio"><span id="ratioLabel">3:4</span></button>
+      <button class="chip-btn" id="filterBtn" type="button" title="Filter">
+        <svg viewBox="0 0 24 24"><circle cx="9" cy="9" r="6"/><circle cx="15" cy="15" r="6"/></svg><span id="filterLabel">Normal</span>
+      </button>
+    </div>
+    <button class="icon-btn" id="gridBtn" type="button" aria-label="Grid" title="Grid">
+      <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M9 3v18M15 3v18M3 9h18M3 15h18"/></svg>
+    </button>
+  </header>
+
+  <div class="mode-badge" id="modeBadge" hidden></div>
+
+  <!-- ============================ Bottom ============================ -->
+  <footer class="bottom">
+    <div class="zoom" id="zoom" role="group" aria-label="Zoom"></div>
+
+    <div class="strip-wrap" id="stripWrap" hidden>
+      <div class="strip" id="strip" role="listbox"></div>
+    </div>
+
+    <nav class="modes" id="modes" role="tablist" aria-label="Camera mode">
+      <button role="tab" data-mode="explore" type="button">Explore</button>
+      <button role="tab" data-mode="idea" type="button">Idea</button>
+      <button role="tab" data-mode="photo" type="button" aria-selected="true">Photo</button>
+      <button role="tab" data-mode="template" type="button">Template</button>
+    </nav>
+
+    <div class="controls">
+      <button class="thumb-btn" id="galleryBtn" type="button" aria-label="Gallery"><img id="galleryThumb" alt="" hidden></button>
+      <button class="shutter" id="shutter" type="button" aria-label="Take photo"><span></span></button>
+      <button class="icon-btn round" id="flipBtn" type="button" aria-label="Switch camera" title="Switch camera">
+        <svg viewBox="0 0 24 24"><path d="M20 7h-3l-2-3H9L7 7H4a1 1 0 0 0-1 1v11a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1V8a1 1 0 0 0-1-1Z"/><path d="M15.5 12.5a3.5 3.5 0 0 1-6.3 2M8.5 13.5a3.5 3.5 0 0 1 6.3-2"/><path d="M15 9.5v2h-2M9 16.5v-2h2"/></svg>
+      </button>
+    </div>
+  </footer>
+
+  <!-- ============================ Explore ============================ -->
+  <section class="sheet full" id="exploreSheet" aria-label="Explore poses" hidden>
+    <header class="sheet-head">
+      <button class="icon-btn" data-close type="button" aria-label="Back to camera"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+      <h2>Explore poses</h2>
+      <span class="count" id="exploreCount"></span>
+    </header>
+    <div class="search">
+      <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="exploreSearch" type="search" placeholder="Search poses — yoga, couple, selfie…" autocomplete="off">
+    </div>
+    <div class="cats" id="exploreCats" role="tablist"></div>
+    <div class="pose-grid" id="poseGrid"></div>
+  </section>
+
+  <!-- ============================ Pose detail ============================ -->
+  <section class="sheet" id="poseSheet" aria-label="Pose details" hidden>
+    <div class="grabber"></div>
+    <div class="pose-detail">
+      <div class="pose-detail-fig" id="poseDetailFig"></div>
+      <div class="pose-detail-body">
+        <div class="pose-detail-meta" id="poseDetailMeta"></div>
+        <h2 id="poseDetailName"></h2>
+        <p id="poseDetailDesc"></p>
+        <ul class="tips" id="poseDetailTips"></ul>
+        <div class="row">
+          <button class="btn primary grow" id="tryPoseBtn" type="button">✨ Try this pose</button>
+          <button class="btn icon" id="favPoseBtn" type="button" aria-label="Favourite">♡</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================ Settings ============================ -->
+  <section class="sheet" id="settingsSheet" aria-label="Settings" hidden>
+    <div class="grabber"></div>
+    <header class="sheet-head">
+      <h2>Settings</h2>
+      <button class="icon-btn" data-close type="button" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+    </header>
+    <div class="settings" id="settingsForm">
+      <h3>Camera</h3>
+      <label class="set"><span>Resolution</span>
+        <select name="resolution"><option value="720">HD 720p</option><option value="1080">Full HD 1080p</option><option value="2160">4K (if supported)</option></select></label>
+      <label class="set"><span>Aspect ratio</span>
+        <select name="ratio"><option value="3:4">3:4</option><option value="9:16">9:16</option><option value="1:1">1:1</option><option value="full">Full screen</option></select></label>
+      <label class="set"><span>Self-timer</span>
+        <select name="timer"><option value="0">Off</option><option value="3">3 seconds</option><option value="5">5 seconds</option><option value="10">10 seconds</option></select></label>
+      <label class="set"><span>Mirror front camera photos</span><input type="checkbox" name="mirror"></label>
+      <label class="set"><span>Grid lines</span><input type="checkbox" name="grid"></label>
+      <label class="set"><span>Shutter sound</span><input type="checkbox" name="sound"></label>
+      <label class="set"><span>Photo quality <output id="jpegOut"></output></span><input type="range" name="jpeg" min="0.6" max="1" step="0.02"></label>
+
+      <h3>Pose outline</h3>
+      <label class="set"><span>Outline colour</span>
+        <select name="overlayColor"><option value="#ffffff">White</option><option value="#ffd400">Yellow</option><option value="#3ef0ff">Cyan</option><option value="#ff4fd8">Pink</option><option value="#4dff88">Green</option></select></label>
+      <label class="set"><span>Outline opacity <output id="opacityOut"></output></span><input type="range" name="overlayOpacity" min="0.2" max="1" step="0.05"></label>
+      <label class="set"><span>Outline size <output id="sizeOut"></output></span><input type="range" name="overlaySize" min="0.6" max="1.2" step="0.05"></label>
+      <label class="set"><span>Pose coach <small>Live match score using on-device pose detection</small></span><input type="checkbox" name="coach"></label>
+      <label class="set"><span>Auto-capture when matched</span><input type="checkbox" name="autoCapture"></label>
+      <label class="set"><span>Match needed <output id="thresholdOut"></output></span><input type="range" name="threshold" min="0.6" max="0.95" step="0.05"></label>
+
+      <h3>AI templates</h3>
+      <div class="set static"><span>Status</span><b id="aiStatus">Checking…</b></div>
+      <label class="set"><span>AI quality <small>Higher looks better but takes longer</small></span>
+        <select name="aiQuality"><option value="low">Fast</option><option value="medium">Balanced</option><option value="high">Best</option></select></label>
+      <label class="set"><span>Also save the original photo</span><input type="checkbox" name="keepOriginal"></label>
+
+      <h3>Storage</h3>
+      <div class="set static"><span>Gallery <small id="galleryUsage"></small></span><button class="btn danger small" id="clearGalleryBtn" type="button">Clear</button></div>
+      <p class="about">Magic Pose <span id="versionLabel"></span> · Photos stay on this device. Only Template photos are sent to the AI service for editing.</p>
+    </div>
+  </section>
+
+  <!-- ============================ Gallery ============================ -->
+  <section class="sheet full" id="gallerySheet" aria-label="Gallery" hidden>
+    <header class="sheet-head">
+      <button class="icon-btn" data-close type="button" aria-label="Back to camera"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+      <h2>Gallery</h2>
+      <span class="count" id="galleryCount"></span>
+    </header>
+    <div class="gallery-grid" id="galleryGrid"></div>
+    <p class="empty" id="galleryEmpty" hidden>No photos yet. Go take some magic shots! ✨</p>
+  </section>
+
+  <!-- ============================ Viewer / AI result ============================ -->
+  <section class="viewer" id="viewer" aria-label="Photo" hidden>
+    <header class="viewer-head">
+      <button class="icon-btn" id="viewerClose" type="button" aria-label="Close"><svg viewBox="0 0 24 24"><path d="m15 18-6-6 6-6"/></svg></button>
+      <div class="viewer-title" id="viewerTitle"></div>
+      <button class="icon-btn" id="viewerDelete" type="button" aria-label="Delete"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button>
+    </header>
+    <div class="viewer-stage" id="viewerStage">
+      <img id="viewerImg" alt="">
+      <img id="viewerBefore" class="before" alt="" hidden>
+      <div class="ai-progress" id="aiProgress" hidden>
+        <div class="sparkle">✨</div>
+        <b id="aiProgressTitle">AI is restyling your photo…</b>
+        <small id="aiProgressText">Showing an instant preview meanwhile</small>
+        <div class="bar"><i></i></div>
+      </div>
+      <div class="viewer-note" id="viewerNote" hidden></div>
+    </div>
+    <div class="restyle" id="restyle" hidden>
+      <div class="strip small" id="restyleStrip"></div>
+    </div>
+    <footer class="viewer-actions">
+      <button class="btn" id="compareBtn" type="button" hidden>Hold to compare</button>
+      <button class="btn" id="retryAiBtn" type="button" hidden>Retry AI</button>
+      <button class="btn" id="shareBtn" type="button">Share</button>
+      <button class="btn primary" id="saveBtn" type="button">Download</button>
+    </footer>
+  </section>
+
+  <input type="file" id="fileInput" accept="image/*" hidden>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="scrim" id="scrim" hidden></div>
+</div>
+
+<script type="module" src="js/app.js"></script>
+</body>
+</html>

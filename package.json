@@ -1,0 +1,20 @@
+{
+  "name": "magic-pose",
+  "version": "1.0.0",
+  "description": "Magic Pose - a camera web app with a pose library (Explore), live pose outlines on the camera (Idea) and instant AI photo restyling (Template), with a Node.js/Express backend.",
+  "main": "backend/server.js",
+  "scripts": {
+    "start": "node backend/server.js",
+    "dev": "node --watch backend/server.js",
+    "test": "node --test backend/test/"
+  },
+  "keywords": ["camera", "pose", "photography", "ai", "image-editing", "pose-detection", "pwa", "express"],
+  "author": "maddy1357",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.17"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
